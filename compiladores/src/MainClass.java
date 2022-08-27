@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -23,7 +24,11 @@ public class MainClass {
         final String fileName = "MyCode.txt";
         String number = "[0-9]";
         String letter = "[a-zA-Z]";
-        String operator = "[-+*/=]";
+        String operator = "[-+*/=<!.,&]";
+        String delim = "()[]{};";
+        String[] coment = {"/*", "*/"};
+        String[] decl = {"class","extends","public","static","void","main","length","this","new"};
+        String[] fluxo = {"if", "else", "while", "return", "print"};
 
         try {
             var MyFileObject = new FileInputStream(fileName);
@@ -38,6 +43,7 @@ public class MainClass {
                 token = "";
 
                 if(myData.matches("\\s")){
+                    token="*";
                     readData = MyFileObject.read();
                     myData = charToString(readData);
                 }
@@ -53,17 +59,39 @@ public class MainClass {
                 if (myData.matches(letter)) {
                     token = "id";
 
+                    is_point:
                     while (myData.matches(number) || myData.matches(letter)) {
                         outData = outData + myData;
 
                         readData = MyFileObject.read();
                         myData = charToString(readData);
                     }
+
+                    if(Arrays.asList(decl).contains(outData)){
+                        token = "decl";
+                    }
+                    else if(Arrays.asList(fluxo).contains(outData)){
+                        token = "fluxo";
+                    }
                 }
 
                 if(token == "") {
-                    while (myData.matches(operator)) {
+                    while(myData.matches(operator)) {
                         token = "operator";
+                        outData = outData + myData;
+
+                        readData = MyFileObject.read();
+                        myData = charToString(readData);
+                    }
+
+                    if(Arrays.asList(coment).contains(outData)){
+                        token = "coment";
+                    }
+                }
+
+                if(token == "") {
+                    if (delim.contains(myData)) {
+                        token = "delim";
                         outData = outData + myData;
 
                         readData = MyFileObject.read();
@@ -79,6 +107,18 @@ public class MainClass {
                 }
                 else if(token.matches("operator")){
                     System.out.println("<op," + outData + ">");
+                }
+                else if(token.matches("delim")){
+                    System.out.println("<DELIM," + outData + ">");
+                }
+                else if(token.matches("coment")){
+                    System.out.println("<COMENT," + outData + ">");
+                }
+                else if(token.matches("decl")){
+                    System.out.println("<DECL," + outData + ">");
+                }
+                else if(token.matches("fluxo")){
+                    System.out.println("<FLUXO," + outData + ">");
                 }
 
                 if (myData == "error") {
