@@ -15,7 +15,7 @@ public class MainClass {
 
     static String charToString(int readChar){
         if (readChar == -1) {
-            return "error";
+            return "%";
         }
         return "" + (char) readChar;
     }
@@ -28,7 +28,9 @@ public class MainClass {
         String delim = "()[]{};";
         String[] coment = {"/*", "*/"};
         String[] decl = {"class","extends","public","static","void","main","length","this","new"};
-        String[] fluxo = {"if", "else", "while", "return", "print"};
+        String[] fluxo = {"if", "else", "while", "return", "System.out.println"};
+        String[] tipo = {"boolean", "int", "true", "false", "String"};
+        String exception = "System.out.printl";
 
         try {
             var MyFileObject = new FileInputStream(fileName);
@@ -59,19 +61,23 @@ public class MainClass {
                 if (myData.matches(letter)) {
                     token = "id";
 
-                    is_point:
-                    while (myData.matches(number) || myData.matches(letter)) {
+                    while (myData.matches(number) || myData.matches(letter) || exception.contains(outData)) {
                         outData = outData + myData;
 
                         readData = MyFileObject.read();
                         myData = charToString(readData);
+                        if (myData == "%"){
+                            break;
+                        }
                     }
-
                     if(Arrays.asList(decl).contains(outData)){
                         token = "decl";
                     }
                     else if(Arrays.asList(fluxo).contains(outData)){
                         token = "fluxo";
+                    }
+                    else if(Arrays.asList(tipo).contains(outData)){
+                        token = "tipo";
                     }
                 }
 
@@ -109,19 +115,22 @@ public class MainClass {
                     System.out.println("<op," + outData + ">");
                 }
                 else if(token.matches("delim")){
-                    System.out.println("<DELIM," + outData + ">");
+                    System.out.println("<delim," + outData + ">");
                 }
                 else if(token.matches("coment")){
-                    System.out.println("<COMENT," + outData + ">");
+                    System.out.println("<coment," + outData + ">");
                 }
                 else if(token.matches("decl")){
-                    System.out.println("<DECL," + outData + ">");
+                    System.out.println("<decl," + outData + ">");
                 }
                 else if(token.matches("fluxo")){
-                    System.out.println("<FLUXO," + outData + ">");
+                    System.out.println("<fluxo," + outData + ">");
+                }
+                else if(token.matches("tipo")){
+                    System.out.println("<tipo," + outData + ">");
                 }
 
-                if (myData == "error") {
+                if (myData == "%" || token == "") {
                     eof = true;
                 }
             }
