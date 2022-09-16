@@ -61,7 +61,7 @@ public class MainClass {
                 if (myData.matches(letter)) {
                     token = "id";
 
-                    while (myData.matches(number) || myData.matches(letter) || exception.contains(outData)) {
+                    while ((myData.matches(number) || myData.matches(letter) || exception.contains(outData)) && !outData.matches("int")) {
                         outData = outData + myData;
 
                         readData = MyFileObject.read();
