@@ -1,9 +1,11 @@
 class Factorial{
 public static void main(String[] a){
 System.out.println(new Fac().ComputeFac(10));
-int a
 }
 }
+
+/* Classe fact */
+
 class Fac {
 public int ComputeFac(int num){
 int numaux ;
@@ -12,6 +14,16 @@ numaux = 1 ;
 else
 numaux = num * (this.ComputeFac(num-1)) ;
 return numaux ;
-intakdsljflkaj = 0;
 }
 
+alfa = (2 + 2);
+Alfa = 4;
+Beta = alfa;
+Aux = true;
+
+if(alfa && beta){
+return true
+} else {
+return false
+}
+}
